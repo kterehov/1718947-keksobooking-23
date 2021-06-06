@@ -38,16 +38,6 @@ function getRandomFloatInclusive(min, max, point) {
   return getRandomIntInclusive(min*point, max*point)/point;
 }
 
-/*const getAuthor = () => {
-
-};
-
-const item = () => ({
-  author: getAuthor,
-  offer: '',
-  location : '',
-});*/
-
 let avatarNumber = 0;
 
 const item = () => {
