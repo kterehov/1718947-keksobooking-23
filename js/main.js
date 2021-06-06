@@ -160,8 +160,6 @@ const item = (number) => {
 
 const ads = new Array(...getAvatarNumber(COUNT_ADS)).map((key) => item(key));
 
-console.log(ads);
-
 /**
  * Чтоб линтер не ругался )
  *
