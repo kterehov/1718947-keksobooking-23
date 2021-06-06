@@ -41,17 +41,6 @@ function getRandomFloatInclusive(min, max, point) {
 let avatarNumber = 0;
 
 const item = () => {
-  const getAvatar = () => {
-    let pictures = (avatarNumber++).toString();
-    if(pictures.includes('9')){
-      pictures =(avatarNumber++).toString();
-    }
-    if(pictures.length<2){
-      pictures=`0${pictures}`;
-    }
-    return  `img/avatars/user${pictures}.png`;
-  };
-
   const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
   const TIMES = ['12:00', '13:00', '14:00'];
   const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -60,13 +49,42 @@ const item = () => {
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
   ];
+  const RANGE_ROOMS = {min:1, max:10};
+  const RANGE_QUESTS = {min: 1, max:20 };
+  const RANGE_PRICE = {min: 10000, max:90000 };
+  const LOCATION = {
+    lat: {
+      min: 35.65000,
+      max: 35.70000,
+      point: 5,
+    },
+    lng: {
+      min: 139.70000,
+      max: 139.80000,
+      point: 5,
+    },
+  };
+  const TITLE = 'Есть над чем задуматься.';
+  const DESCRIPTION = 'Задача организации, в особенности же постоянный количественный рост и сфера нашей активности требуют от нас анализа систем массового участия.';
+
+  const getAvatar = () => {
+    let pictures = (++avatarNumber).toString();
+    if(pictures.includes('9')){
+      pictures =(++avatarNumber).toString();
+    }
+    if(pictures.length<2){
+      pictures=`0${pictures}`;
+    }
+    return  `img/avatars/user${pictures}.png`;
+  };
 
   const getRandomItem = (items) => (items[getRandomIntInclusive(0, items.length-1)]);
+
   const getRandomArray = (items) => {
     const result = [];
     while(result.length===0){
       for(let iterable=0;iterable<items.length-1;iterable++) {
-        if(getRandomIntInclusive(1,2)===1){
+        if(Math.random()<=0.5){
           result.push(items[iterable]);
         }
       }
@@ -79,21 +97,21 @@ const item = () => {
   };
 
   const location = {
-    lat: getRandomFloatInclusive(35.65000, 35.70000, 5),
-    lng: getRandomFloatInclusive(139.70000, 139.80000, 5),
+    lat: getRandomFloatInclusive(LOCATION.lat.min, LOCATION.lat.max, LOCATION.lat.point),
+    lng: getRandomFloatInclusive(LOCATION.lng.min, LOCATION.lng.max, LOCATION.lng.point),
   };
 
   const offer = {
-    title: 'Есть над чем задуматься.',
+    title: TITLE,
     address: `${location.lat}, ${location.lng}`,
-    price: getRandomIntInclusive(1000,10000),
+    price: getRandomIntInclusive(RANGE_PRICE.min,RANGE_PRICE.max),
     type: getRandomItem(TYPES),
-    rooms: getRandomIntInclusive(1,10),
-    guests: getRandomIntInclusive(1,20),
+    rooms: getRandomIntInclusive(RANGE_ROOMS.min,RANGE_ROOMS.max),
+    guests: getRandomIntInclusive(RANGE_QUESTS.min,RANGE_QUESTS.max),
     checkin: getRandomItem(TIMES),
     checkout: getRandomItem(TIMES),
     features: getRandomArray(FEATURES),
-    description: 'Задача организации, в особенности же постоянный количественный рост и сфера нашей активности требуют от нас анализа систем массового участия.',
+    description: DESCRIPTION,
     photos: getRandomArray(PHOTOS),
   };
 
@@ -104,4 +122,6 @@ const item = () => {
   };
 };
 
-item();
+const ads = new Array(10).fill(null).map(() => item());
+
+console.log(ads);
