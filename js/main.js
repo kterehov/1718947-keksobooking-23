@@ -1,3 +1,3 @@
-import {ads} from 'ads.js';
+import {ads} from './ads.js';
 
 ads(20);

@@ -1,4 +1,4 @@
-import {getRandomFloatInclusive, getRandomIntInclusive, getRandomItem, getRandomArray} from 'utils.js';
+import {getRandomFloatInclusive, getRandomIntInclusive, getRandomItem, getRandomArray} from './utils.js';
 
 const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const TIMES = ['12:00', '13:00', '14:00'];
