@@ -9,42 +9,44 @@ const translate = {
 };
 
 /**
+ * Изменение текста узла
+ *
+ * @param {object} card
+ * @param {string} selector
+ * @param {string|array} value
+ */
+const changeTextElement = (card, selector, value) => {
+  const element = card.querySelector(selector);
+
+  if(value.length===0){
+    element.classList.add('hidden');
+  }
+
+  element.textContent = value;
+};
+
+/**
+ * Добавление фотографий
+ *
+ * @param {object} card
+ * @param {array} links
+ */
+const createPhotosBlock = (card, links) => {
+  const photoTemplate = card.querySelector('.popup__photo');
+  const photoList = card.querySelector('.popup__photos');
+  links.forEach((link) => {
+    const photo = photoTemplate.cloneNode();
+    photo.setAttribute('src', link);
+    photoList.appendChild(photo);
+  });
+  photoList.removeChild(photoTemplate);
+};
+
+/**
  * Создание карточек
  * @param {object} items
  */
 const createCard = (items) => {
-
-  /**
-   * Изменение текста узла
-   *
-   * @param {object} card
-   * @param {string} selector
-   * @param {string|array} value
-   */
-  const changeTextElement = (card, selector, value) => {
-    const element = card.querySelector(selector);
-    element.textContent = value;
-  };
-
-  /**
-   * Добавление фотографий
-   *
-   * @param {object} card
-   * @param {array} links
-   */
-  const createPhoto = (card, links) => {
-    const photoTemplate = card.querySelector('.popup__photo');
-    const photoList = card.querySelector('.popup__photos');
-    const fragmentPhoto = document.createDocumentFragment();
-    links.forEach((link) => {
-      const photo = photoTemplate.cloneNode();
-      photo.setAttribute('src', link);
-      fragmentPhoto.appendChild(photo);
-    });
-
-    photoList.removeChild(photoTemplate);
-    photoList.appendChild(fragmentPhoto);
-  };
 
   const fragmentCard = document.createDocumentFragment();
   items.forEach((item) => {
@@ -58,7 +60,7 @@ const createCard = (items) => {
     changeTextElement(card, '.popup__text--time', `Заезд после ${item.offer.checkin}, выезд до ${item.offer.checkout}`);
     changeTextElement(card, '.popup__features', item.offer.features);
     changeTextElement(card, '.popup__description', item.offer.description);
-    createPhoto(card, item.offer.photos);
+    createPhotosBlock(card, item.offer.photos);
 
     const photoAvatar = card.querySelector('.popup__avatar');
     photoAvatar.setAttribute('src', item.author.avatar);
