@@ -1,3 +1,4 @@
 import {ads} from './ads.js';
+import {createCard} from './card.js';
 
-ads(20);
+createCard(ads(20));
