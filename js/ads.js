@@ -101,4 +101,4 @@ const item = (number) => {
  */
 const ads = (count) => (new Array(...getAvatarNumber(count)).map((key) => item(key)));
 
-export{ads};
+export {ads};
