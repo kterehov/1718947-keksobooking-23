@@ -40,10 +40,10 @@ const inputAdFormPrice = adForm.querySelector('#price');
  * @type {object}
  */
 const roomNumberToCapacity = {
-  1 : [ '1' ],
-  2 : ['1', '2'],
-  3 : ['1', '2', '3'],
-  100 : ['0'],
+  1: ['1'],
+  2: ['1', '2'],
+  3: ['1', '2', '3'],
+  100: ['0'],
 };
 
 /**
@@ -52,38 +52,38 @@ const roomNumberToCapacity = {
  * @type {object}
  */
 const storageAdForm = {
-  el : {
+  el: {
     adForm,
     inputAdFormRoomNumber,
     inputAdFormTitle,
     inputAdFormCapacity,
   },
-  vl : {
-    inputAdFormTitle : {
-      'object' : inputAdFormTitle,
-      'rules' : {
-        'tooShort' : {
+  vl: {
+    inputAdFormTitle: {
+      'object': inputAdFormTitle,
+      'rules': {
+        'tooShort': {
           'value': 30,
-          'text':  'Ещё {value} симв.',
+          'text': 'Ещё {value} симв.',
         },
-        'tooLong' : {
+        'tooLong': {
           'value': 100,
-          'text':  'Удалите лишние {value} симв.',
+          'text': 'Удалите лишние {value} симв.',
         },
         'valueMissing': {
-          'text' : 'Заголовок объявления обязательное поле',
+          'text': 'Заголовок объявления обязательное поле',
         },
       },
     },
-    inputAdFormPrice : {
-      'object' : inputAdFormPrice,
-      'rules' : {
-        'rangeOverflow' : {
+    inputAdFormPrice: {
+      'object': inputAdFormPrice,
+      'rules': {
+        'rangeOverflow': {
           'value': 1000000,
-          'text':  'Максимальная цена за ночь {value}.',
+          'text': 'Максимальная цена за ночь {value}.',
         },
         'valueMissing': {
-          'text' : 'Цена объявления обязательное поле',
+          'text': 'Цена объявления обязательное поле',
         },
       },
     },

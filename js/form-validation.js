@@ -24,9 +24,9 @@ function validate(element, report = false) {
     }
   }
 
-  if(message){
+  if (message) {
     currentElement.setCustomValidity(message.join('\\n'));
-  }else{
+  } else {
     currentElement.setCustomValidity('');
   }
 

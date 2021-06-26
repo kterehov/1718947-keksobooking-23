@@ -15,7 +15,7 @@ const toogleInputOptions = (element, values) => {
       }
       item.selected = 'selected';
     } else {
-      if(item.hasAttribute('selected')){
+      if (item.hasAttribute('selected')) {
         item.removeAttribute('selected');
       }
       item.setAttribute('disabled', 'disabled');
@@ -63,7 +63,7 @@ storageAdForm.el.adForm.addEventListener('submit', (event) => {
 /**
  * Создание эвентов на валидацию и живое изменение
  */
-for(const eventElement in storageAdForm.vl) {
+for (const eventElement in storageAdForm.vl) {
   storageAdForm.vl[eventElement].object.addEventListener('invalid', () => {
     validate(storageAdForm.vl[eventElement], false);
   });
