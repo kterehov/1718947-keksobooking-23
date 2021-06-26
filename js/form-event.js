@@ -1,4 +1,4 @@
-import {storageAdForm, roomNumberToCapacity} from './form-variables.js';
+import {storageAdForm, roomNumberToCapacity, currentTypeToPrice} from './form-variables.js';
 import {validate} from './form-validation.js';
 
 /**
@@ -40,9 +40,23 @@ const changeRoomNumberToCapacity = (room, capacity, roomToCapacity) => {
 };
 
 /**
+ * Изменение времени
+ * @param {object} from
+ * @param {object} to
+ */
+const changeTime = (from, to) => {
+  to.value = from.value;
+};
+
+/**
  * Дефолтное значение у комнат - мест при загрузке страницы
  */
 changeRoomNumberToCapacity(storageAdForm.el.inputAdFormRoomNumber, storageAdForm.el.inputAdFormCapacity, roomNumberToCapacity);
+
+/**
+ * Дефольное значение у цены за ночь с валидацией
+ */
+currentTypeToPrice();
 
 /**
  * Эвент на зависимость между комнатами и местами
@@ -50,6 +64,18 @@ changeRoomNumberToCapacity(storageAdForm.el.inputAdFormRoomNumber, storageAdForm
 storageAdForm.el.adForm.addEventListener('change', (event) => {
   if (event.target === storageAdForm.el.inputAdFormRoomNumber) {
     changeRoomNumberToCapacity(event.target, storageAdForm.el.inputAdFormCapacity, roomNumberToCapacity);
+  }
+
+  if (event.target === storageAdForm.el.inputAdFormType) {
+    currentTypeToPrice();
+  }
+
+  if (event.target === storageAdForm.el.inputAdFormTimeIn) {
+    changeTime(event.target, storageAdForm.el.inputAdFormTimeOut);
+  }
+
+  if (event.target === storageAdForm.el.inputAdFormTimeOut) {
+    changeTime(event.target, storageAdForm.el.inputAdFormTimeIn);
   }
 });
 

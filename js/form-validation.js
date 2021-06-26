@@ -1,25 +1,29 @@
+import {validityState} from './form-variables.js';
+
 /**
  * Универсальная функция валидации элементов
  * @param {object} element
  * @param {boolean} report
  */
-function validate(element, report = false) {
+const validate = (element, report = false) => {
   const currentElement = element.object;
   const message = [];
 
   for (const key in element.rules) {
-    if (currentElement.validity[key]) {
+    if (currentElement.validity[element.rules[key].type]) {
       const currentRule = element.rules[key];
-      if (key === 'tooShort') {
+      if (currentRule.type === validityState.tooShort) {
         const currentValue = currentElement.value.length;
         message.push(currentRule.text.replace('{value}', currentRule.value - currentValue));
-      } else if (key === 'tooLong') {
+      } else if (currentRule.type === validityState.tooLong) {
         const currentValue = currentElement.value.length;
         message.push(currentRule.text.replace('{value}', currentRule.value - currentValue));
-      } else if (key === 'rangeOverflow') {
+      } else if (currentRule.type === validityState.rangeOverflow) {
         message.push(currentRule.text.replace('{value}', currentRule.value));
-      } else {
+      } else if (currentRule.type === validityState.valueMissing ){
         message.push(currentRule.text);
+      } else if (currentRule.type === validityState.rangeUnderflow ){
+        message.push(currentRule.text.replace('{value}', currentRule.value));
       }
     }
   }
@@ -33,6 +37,6 @@ function validate(element, report = false) {
   if (report) {
     currentElement.reportValidity();
   }
-}
+};
 
 export {validate};
