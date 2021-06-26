@@ -45,7 +45,7 @@ const changeRoomNumberToCapacity = (room, capacity, roomToCapacity) => {
  * @param {object} to
  */
 const changeTime = (from, to) => {
-  to.value = from.querySelector('option:checked').value;
+  to.value = from.value;
 };
 
 /**
