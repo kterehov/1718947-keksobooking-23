@@ -154,4 +154,15 @@ const storageAdForm = {
   },
 };
 
-export {adForm, mapFilterForm, roomNumberToCapacity, storageAdForm, validityState, typeToPrice, currentTypeToPrice};
+/**
+ * Форма фильтрации
+ *
+ * @type {object}
+ */
+const storageMapFilterForm = {
+  el: {
+    mapFilterForm,
+  },
+};
+
+export {adForm, mapFilterForm, roomNumberToCapacity, storageAdForm, validityState, typeToPrice, currentTypeToPrice, storageMapFilterForm};
