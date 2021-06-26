@@ -90,8 +90,7 @@ const typeToPrice = {
  * @returns {int}
  */
 const currentTypeToPrice = () => {
-  const currentType = inputAdFormType.querySelector('option:checked');
-  const currentPrice = typeToPrice[currentType.value];
+  const currentPrice = typeToPrice[inputAdFormType.value];
   inputAdFormPrice.setAttribute('min', currentPrice);
   inputAdFormPrice.setAttribute('placeholder', currentPrice);
   return currentPrice;
