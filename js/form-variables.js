@@ -34,6 +34,21 @@ const inputAdFormTitle = adForm.querySelector('#title');
  */
 const inputAdFormPrice = adForm.querySelector('#price');
 
+/**
+ * Тип жилья цены
+ * @type {Element}
+ */
+const inputAdFormType = adForm.querySelector('#type');
+
+/**
+ * @type {Element}
+ */
+const inputAdFormTimeIn = adForm.querySelector('#timein');
+
+/**
+ * @type {Element}
+ */
+const inputAdFormTimeOut = adForm.querySelector('#timeout');
 
 /**
  * Зависимость комнат и количества мест
@@ -47,6 +62,42 @@ const roomNumberToCapacity = {
 };
 
 /**
+ * Список типов валидации
+ * @type {object}
+ */
+const validityState = {
+  tooShort : 'tooShort',
+  tooLong : 'tooLong',
+  valueMissing : 'valueMissing',
+  rangeOverflow : 'rangeOverflow',
+  rangeUnderflow : 'rangeUnderflow',
+};
+
+/**
+ * Зависимость типа жилья к цене
+ * @type {object}
+ */
+const typeToPrice = {
+  bungalow : 0,
+  flat: 1000,
+  hotel: 3000,
+  house: 5000,
+  palace: 10000,
+};
+
+/**
+ * Функция управления минимальной ценой от типа дома
+ * @returns {int}
+ */
+const currentTypeToPrice = () => {
+  const currentType = inputAdFormType.querySelector('option:checked');
+  const currentPrice = typeToPrice[currentType.value];
+  inputAdFormPrice.setAttribute('min', currentPrice);
+  inputAdFormPrice.setAttribute('placeholder', currentPrice);
+  return currentPrice;
+};
+
+/**
  * Форма AdForm, все объекты и валидация
  *
  * @type {object}
@@ -57,20 +108,26 @@ const storageAdForm = {
     inputAdFormRoomNumber,
     inputAdFormTitle,
     inputAdFormCapacity,
+    inputAdFormType,
+    inputAdFormTimeIn,
+    inputAdFormTimeOut,
   },
   vl: {
     inputAdFormTitle: {
       'object': inputAdFormTitle,
       'rules': {
-        'tooShort': {
+        0 : {
+          'type': validityState.tooShort,
           'value': 30,
           'text': 'Ещё {value} симв.',
         },
-        'tooLong': {
+        1 : {
+          'type': validityState.tooLong,
           'value': 100,
           'text': 'Удалите лишние {value} симв.',
         },
-        'valueMissing': {
+        2 : {
+          'type': validityState.valueMissing,
           'text': 'Заголовок объявления обязательное поле',
         },
       },
@@ -78,16 +135,23 @@ const storageAdForm = {
     inputAdFormPrice: {
       'object': inputAdFormPrice,
       'rules': {
-        'rangeOverflow': {
+        0 : {
+          'type': validityState.rangeOverflow,
           'value': 1000000,
           'text': 'Максимальная цена за ночь {value}.',
         },
-        'valueMissing': {
+        1 : {
+          'type': validityState.valueMissing,
           'text': 'Цена объявления обязательное поле',
+        },
+        2 : {
+          'type': validityState.rangeUnderflow,
+          'value': currentTypeToPrice,
+          'text': 'Минимальная цена за ночь {value}.',
         },
       },
     },
   },
 };
 
-export {adForm, mapFilterForm, roomNumberToCapacity, storageAdForm};
+export {adForm, mapFilterForm, roomNumberToCapacity, storageAdForm, validityState, typeToPrice, currentTypeToPrice};
