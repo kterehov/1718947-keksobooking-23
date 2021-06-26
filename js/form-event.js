@@ -83,7 +83,6 @@ storageAdForm.el.adForm.addEventListener('change', (event) => {
  * Отправка формы
  */
 storageAdForm.el.adForm.addEventListener('submit', (event) => {
-  this.submit();
   event.preventDefault();
 });
 
