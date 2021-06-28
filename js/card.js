@@ -1,5 +1,4 @@
 const template = document.querySelector('#card').content;
-const map = document.querySelector('#map-canvas');
 const translate = {
   flat: 'Квартира',
   bungalow: 'Бунгало',

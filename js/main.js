@@ -65,4 +65,4 @@ const configAds = formatAds(ads(20), {
   createCard,
 });
 
-const secondMarkers = map.addMarkers(configAds);
+map.addMarkers(configAds);
