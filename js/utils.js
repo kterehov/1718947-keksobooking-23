@@ -64,4 +64,24 @@ const getRandomArray = (items) => {
   return result;
 };
 
-export {getRandomIntInclusive, getRandomFloatInclusive, getRandomItem, getRandomArray};
+/**
+ * Форматировать данных объявление для карты
+ * @param {object} ads
+ * @returns {*}
+ */
+const formatAds = (ads, options) => {
+  const result = [];
+  ads.forEach((item) => {
+    result.push({
+      'coordinate': {
+        lat: item.location.lat,
+        lng: item.location.lng,
+      },
+      options: options,
+      bind: options.createCard(item),
+    });
+  });
+  return result;
+};
+
+export {getRandomIntInclusive, getRandomFloatInclusive, getRandomItem, getRandomArray, formatAds};
