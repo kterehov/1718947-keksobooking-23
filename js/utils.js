@@ -78,7 +78,7 @@ const formatAds = (ads, options) => {
         lng: item.location.lng,
       },
       options: options,
-      bind: options.createCard(item),
+      content: () => options.createCard(item),
     });
   });
   return result;

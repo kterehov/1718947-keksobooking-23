@@ -16,9 +16,9 @@ function addMarker(markerOptions) {
     },
   );
   const result = marker.addTo(this.map.element);
-  if (markerOptions.bind) {
+  if (markerOptions.content) {
     result.bindPopup(
-      markerOptions.bind, {
+      markerOptions.content, {
         keepInView: true,
       });
   }
