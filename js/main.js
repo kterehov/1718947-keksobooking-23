@@ -10,6 +10,16 @@ import {renderMap} from './map.js';
 disableForm();
 
 /**
+ * Дефолтный координаты
+ * @type {object}
+ */
+const coordinate = {
+  lat: 35.682418,
+  lng: 139.753146,
+  zoom: 12,
+};
+
+/**
  * Конфиг для рендера карты
  * @type {object}
  */
@@ -20,11 +30,7 @@ const mapOptions = {
     event: {
       load: enableForm,
     },
-    coordinate: {
-      lat: 35.682418,
-      lng: 139.753146,
-      zoom: 12,
-    },
+    coordinate,
   },
 };
 
@@ -33,10 +39,7 @@ const mapOptions = {
  * @type {object}
  */
 const mainMarkerOptions = {
-  coordinate: {
-    lat: 35.682418,
-    lng: 139.753146,
-  },
+  coordinate,
   options: {
     draggable: true,
     icon: {
