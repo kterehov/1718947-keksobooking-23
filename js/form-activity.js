@@ -47,4 +47,13 @@ const toggleForms = (disable = true) => {
   }
 };
 
-export {toggleForms};
+/**
+ * Отключение формы
+ */
+const disableForm = () => toggleForms(true);
+/**
+ * Вкление формы
+ */
+const enableForm = () => toggleForms(false);
+
+export {disableForm, enableForm};

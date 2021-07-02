@@ -1,5 +1,4 @@
 const template = document.querySelector('#card').content;
-const map = document.querySelector('#map-canvas');
 const translate = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -44,31 +43,22 @@ const createPhotosBlock = (card, links) => {
 
 /**
  * Создание карточек
- * @param {object} items
+ * @param {object} item
  */
-const createCard = (items) => {
-
-  const fragmentCard = document.createDocumentFragment();
-  items.forEach((item) => {
-    const card = template.cloneNode(true);
-
-    changeTextElement(card, '.popup__title', item.offer.title);
-    changeTextElement(card, '.popup__text--address', item.offer.address);
-    changeTextElement(card, '.popup__text--price', `${item.offer.price} ₽/ночь`);
-    changeTextElement(card, '.popup__type', translate[item.offer.type]);
-    changeTextElement(card, '.popup__text--capacity', `${item.offer.rooms} комнаты для ${item.offer.guests} гостей`);
-    changeTextElement(card, '.popup__text--time', `Заезд после ${item.offer.checkin}, выезд до ${item.offer.checkout}`);
-    changeTextElement(card, '.popup__features', item.offer.features);
-    changeTextElement(card, '.popup__description', item.offer.description);
-    createPhotosBlock(card, item.offer.photos);
-
-    const photoAvatar = card.querySelector('.popup__avatar');
-    photoAvatar.setAttribute('src', item.author.avatar);
-
-    fragmentCard.appendChild(card);
-  });
-
-  map.appendChild(fragmentCard);
+const createCard = (item) => {
+  const card = template.cloneNode(true);
+  changeTextElement(card, '.popup__title', item.offer.title);
+  changeTextElement(card, '.popup__text--address', item.offer.address);
+  changeTextElement(card, '.popup__text--price', `${item.offer.price} ₽/ночь`);
+  changeTextElement(card, '.popup__type', translate[item.offer.type]);
+  changeTextElement(card, '.popup__text--capacity', `${item.offer.rooms} комнаты для ${item.offer.guests} гостей`);
+  changeTextElement(card, '.popup__text--time', `Заезд после ${item.offer.checkin}, выезд до ${item.offer.checkout}`);
+  changeTextElement(card, '.popup__features', item.offer.features);
+  changeTextElement(card, '.popup__description', item.offer.description);
+  createPhotosBlock(card, item.offer.photos);
+  const photoAvatar = card.querySelector('.popup__avatar');
+  photoAvatar.setAttribute('src', item.author.avatar);
+  return card;
 };
 
 export {createCard};
