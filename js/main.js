@@ -5,15 +5,10 @@ import {disableForm, enableForm} from './form.js';
 import {renderMap} from './map.js';
 
 /**
- * Отклюфаем формы до рендера
- */
-disableForm();
-
-/**
  * Дефолтный координаты
  * @type {object}
  */
-const coordinate = {
+const DEFAULT_COORS = {
   lat: 35.682418,
   lng: 139.753146,
   zoom: 12,
@@ -30,7 +25,7 @@ const mapOptions = {
     event: {
       load: enableForm,
     },
-    coordinate,
+    coordinate: DEFAULT_COORS,
   },
 };
 
@@ -39,7 +34,7 @@ const mapOptions = {
  * @type {object}
  */
 const mainMarkerOptions = {
-  coordinate,
+  coordinate: DEFAULT_COORS,
   options: {
     draggable: true,
     icon: {
@@ -51,21 +46,28 @@ const mainMarkerOptions = {
 };
 
 /**
- * Рендер карты
+ * Отклюфаем формы до рендера
  */
-const map = renderMap;
-map.init(L, mapOptions);
-const mainMarker = map.addMarker(mainMarkerOptions);
-map.setInputFromMarkerCoordinate('#address', mainMarker);
+disableForm();
 
-const configAds = formatAds(ads(20), {
-  draggable: false,
-  icon: {
-    iconUrl: './img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  },
-  createCard,
-});
+/**
+ * Создание карты
+ */
+const createMapMarker = () => {
+  const map = renderMap;
+  map.init(L, mapOptions);
+  const mainMarker = map.addMarker(mainMarkerOptions);
+  map.setInputFromMarkerCoordinate('#address', mainMarker, 5);
+  const configAds = formatAds(ads(20), {
+    draggable: false,
+    icon: {
+      iconUrl: './img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    },
+    createCard,
+  });
+  map.addMarkers(configAds);
+};
 
-map.addMarkers(configAds);
+createMapMarker();

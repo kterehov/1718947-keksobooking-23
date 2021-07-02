@@ -69,19 +69,10 @@ const getRandomArray = (items) => {
  * @param {object} ads
  * @returns {*}
  */
-const formatAds = (ads, options) => {
-  const result = [];
-  ads.forEach((item) => {
-    result.push({
-      'coordinate': {
-        lat: item.location.lat,
-        lng: item.location.lng,
-      },
-      options: options,
-      content: () => options.createCard(item),
-    });
-  });
-  return result;
-};
+const formatAds = (ads, options) => (ads.map((item) => ({
+  'coordinate': item.location,
+  options: options,
+  content: () => options.createCard(item),
+})));
 
 export {getRandomIntInclusive, getRandomFloatInclusive, getRandomItem, getRandomArray, formatAds};

@@ -1,20 +1,39 @@
 /**
- * Добавление маркера
- * @param markerOptions
+ * Создание картинки для карты
+ * @param {object} markerOptions
+ * @returns {*}
  */
-function addMarker(markerOptions) {
-  const markerIcon = this.map.lib.icon({
+function createMapIcon(markerOptions) {
+  return this.map.lib.icon({
     iconUrl: markerOptions.options.icon.iconUrl,
     iconSize: markerOptions.options.icon.iconSize,
     iconAnchor: markerOptions.options.icon.iconAnchor,
   });
-  const marker = this.map.lib.marker(
+}
+
+/**
+ * Создание маркера
+ * @param {object} markerOptions
+ * @param {object} markerIcon
+ * @returns {*}
+ */
+function createMapMarker(markerOptions, markerIcon) {
+  return this.map.lib.marker(
     markerOptions.coordinate,
     {
       icon: markerIcon,
       draggable: markerOptions.options.draggable,
     },
   );
+}
+
+/**
+ * Добавление маркера
+ * @param markerOptions
+ */
+function addMarker(markerOptions) {
+  const markerIcon = this.createMapIcon(markerOptions);
+  const marker = this.createMapMarker(markerOptions, markerIcon);
   const result = marker.addTo(this.map.element);
   if (markerOptions.content) {
     result.bindPopup(
@@ -32,8 +51,8 @@ function addMarker(markerOptions) {
  */
 function addMarkers(markerOptions) {
   const markerGroup = this.map.lib.layerGroup().addTo(this.map.element);
-  for(const item in markerOptions ) {
-    const marker = this.addMarker(markerOptions[item]);
+  for(const item of markerOptions ) {
+    const marker = this.addMarker(item);
     marker.addTo(markerGroup);
   }
   return markerGroup;
@@ -62,19 +81,18 @@ function init(mapLibrary, options) {
 }
 
 /**
- * Задать координаты поля из макрера
+ * Задать координаты поля из маркера
  * @param input
  * @param marker
+ * @param point
  */
-function setInputFromMarkerCoordinate(input, marker) {
-  const setElemenet = (currenElement, value) => {
-    const regex = /[\d, ., \\,]{1,30}/;
-    currenElement.value = regex[Symbol.match](value);
-  };
+function setInputFromMarkerCoordinate(input, marker, point) {
+  point = Math.pow(10, point);
+  const format = (lat, lng) => `${Math.round(lat*point)/point}, ${Math.round(lng*point)/point}`;
   const element = document.querySelector(input);
-  setElemenet(element, marker.getLatLng());
+  element.value = format(marker.getLatLng().lat, marker.getLatLng().lng);
   marker.on('moveend', (evt) => {
-    setElemenet(element, evt.target.getLatLng());
+    element.value = format(evt.target.getLatLng().lat, evt.target.getLatLng().lng);
   });
 }
 
@@ -83,6 +101,8 @@ const renderMap = {
     'lib': '',
     'element': '',
   },
+  createMapIcon,
+  createMapMarker,
   init,
   addMarker,
   addMarkers,
