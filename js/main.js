@@ -1,8 +1,10 @@
+import {showFailMessage, addModal} from './informative-message.js';
 import {formatAds} from './utils.js';
-import {ads} from './ads.js';
+import {request} from './request.js';
 import {createCard} from './card.js';
-import {disableForm, enableForm} from './form.js';
+import {disableForm, enableForm, submitFormEvent, resetDefaultValuesForm} from './form.js';
 import {renderMap} from './map.js';
+
 
 /**
  * Дефолтный координаты
@@ -12,6 +14,11 @@ const DEFAULT_COORS = {
   lat: 35.682418,
   lng: 139.753146,
   zoom: 12,
+};
+
+const BACKEND_URL = {
+  loadAds: 'https://23.javascript.pages.academy/keksobooking/data',
+  saveAds: 'https://23.javascript.pages.academy/keksobooking',
 };
 
 /**
@@ -50,6 +57,25 @@ const mainMarkerOptions = {
  */
 disableForm();
 
+const addAdsFromServer = (map) => {
+  request(
+    BACKEND_URL.loadAds,
+    (body) => {
+      const configAds = formatAds(body, {
+        draggable: false,
+        icon: {
+          iconUrl: './img/pin.svg',
+          iconSize: [40, 40],
+          iconAnchor: [20, 40],
+        },
+        createCard,
+      });
+      map.addMarkers(configAds);
+    },
+    showFailMessage,
+  );
+};
+
 /**
  * Создание карты
  */
@@ -57,17 +83,33 @@ const createMapMarker = () => {
   const map = renderMap;
   map.init(L, mapOptions);
   const mainMarker = map.addMarker(mainMarkerOptions);
-  map.setInputFromMarkerCoordinate('#address', mainMarker, 5);
-  const configAds = formatAds(ads(20), {
-    draggable: false,
-    icon: {
-      iconUrl: './img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-    },
-    createCard,
-  });
-  map.addMarkers(configAds);
+
+  const setAddress = () => {
+    map.setInputFromMarkerCoordinate('#address', mainMarker, 5);
+  };
+
+  setAddress();
+
+  /**
+   * Добавляем данные с сервера
+   */
+  addAdsFromServer(map);
+
+  submitFormEvent(
+    (body)=>request(
+      BACKEND_URL.saveAds,
+      () => {
+        addModal('#success');
+        resetDefaultValuesForm();
+        map.setMarkerCoordinate(mainMarker, DEFAULT_COORS);
+        setAddress();
+      },
+      () =>  addModal('#error'),
+      {
+        method: 'POST',
+        body,
+      }),
+  );
 };
 
 createMapMarker();

@@ -81,10 +81,15 @@ storageAdForm.el.adForm.addEventListener('change', (event) => {
 
 /**
  * Отправка формы
+ * @param {function} request
  */
-storageAdForm.el.adForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-});
+const submitFormEvent = (request) => {
+  storageAdForm.el.adForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    request(formData);
+  });
+};
 
 /**
  * Создание эвентов на валидацию и живое изменение
@@ -99,3 +104,6 @@ for (const eventElement in storageAdForm.vl) {
   });
 }
 
+const resetDefaultValuesForm = () => storageAdForm.el.adForm.reset();
+
+export {submitFormEvent, resetDefaultValuesForm};
