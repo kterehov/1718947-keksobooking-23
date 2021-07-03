@@ -16,6 +16,11 @@ const DEFAULT_COORS = {
   zoom: 12,
 };
 
+const BACKEND_URL = {
+  loadAds: 'https://23.javascript.pages.academy/keksobooking/data',
+  saveAds: 'https://23.javascript.pages.academy/keksobooking',
+};
+
 /**
  * Конфиг для рендера карты
  * @type {object}
@@ -54,7 +59,7 @@ disableForm();
 
 const addAdsFromServer = (map) => {
   request(
-    'https://23.javascript.pages.academy/keksobooking/data',
+    BACKEND_URL.loadAds,
     (body) => {
       const configAds = formatAds(body, {
         draggable: false,
@@ -72,6 +77,7 @@ const addAdsFromServer = (map) => {
 };
 
 
+
 /**
  * Создание карты
  */
@@ -79,7 +85,12 @@ const createMapMarker = () => {
   const map = renderMap;
   map.init(L, mapOptions);
   const mainMarker = map.addMarker(mainMarkerOptions);
-  map.setInputFromMarkerCoordinate('#address', mainMarker, 5);
+
+  const setAddress = () => {
+    map.setInputFromMarkerCoordinate('#address', mainMarker, 5);
+  };
+
+  setAddress();
 
   /**
    * Добавляем данные с сервера
@@ -88,12 +99,12 @@ const createMapMarker = () => {
 
   submitFormEvent(
     (body)=>request(
-      'https://23.javascript.pages.academy/keksobooking',
+      BACKEND_URL.saveAds,
       () => {
         addModal('#success');
         resetDefaultValuesForm();
         map.setMarkerCoordinate(mainMarker, DEFAULT_COORS);
-        map.setInputFromMarkerCoordinate('#address', mainMarker, 5);
+        setAddress();
       },
       () =>  addModal('#error'),
       {
