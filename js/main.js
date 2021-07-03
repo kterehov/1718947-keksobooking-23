@@ -115,5 +115,3 @@ const createMapMarker = () => {
 };
 
 createMapMarker();
-
-addModal('#success');
