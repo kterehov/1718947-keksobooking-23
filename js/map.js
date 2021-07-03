@@ -45,6 +45,15 @@ function addMarker(markerOptions) {
 }
 
 /**
+ * Установка координат для маркера
+ * @param market
+ * @param options
+ */
+function setMarkerCoordinate(marker, options) {
+  marker.setLatLng(options);
+}
+
+/**
  * Добавление несколько маркеров
  * @param markerOptions
  * @returns {*}
@@ -107,6 +116,7 @@ const renderMap = {
   addMarker,
   addMarkers,
   setInputFromMarkerCoordinate,
+  setMarkerCoordinate,
 };
 
 export {renderMap};

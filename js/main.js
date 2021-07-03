@@ -1,8 +1,10 @@
+import {showFailMessage, addModal} from './informative-message.js';
 import {formatAds} from './utils.js';
-import {ads} from './ads.js';
+import {request} from './request.js';
 import {createCard} from './card.js';
-import {disableForm, enableForm} from './form.js';
+import {disableForm, enableForm, submitFormEvent, resetDefaultValuesForm} from './form.js';
 import {renderMap} from './map.js';
+
 
 /**
  * Дефолтный координаты
@@ -50,6 +52,26 @@ const mainMarkerOptions = {
  */
 disableForm();
 
+const addAdsFromServer = (map) => {
+  request(
+    'https://23.javascript.pages.academy/keksobooking/data',
+    (body) => {
+      const configAds = formatAds(body, {
+        draggable: false,
+        icon: {
+          iconUrl: './img/pin.svg',
+          iconSize: [40, 40],
+          iconAnchor: [20, 40],
+        },
+        createCard,
+      });
+      map.addMarkers(configAds);
+    },
+    showFailMessage,
+  );
+};
+
+
 /**
  * Создание карты
  */
@@ -58,16 +80,28 @@ const createMapMarker = () => {
   map.init(L, mapOptions);
   const mainMarker = map.addMarker(mainMarkerOptions);
   map.setInputFromMarkerCoordinate('#address', mainMarker, 5);
-  const configAds = formatAds(ads(20), {
-    draggable: false,
-    icon: {
-      iconUrl: './img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-    },
-    createCard,
-  });
-  map.addMarkers(configAds);
+
+  /**
+   * Добавляем данные с сервера
+   */
+  addAdsFromServer(map);
+
+  submitFormEvent(
+    (body)=>request(
+      'https://23.javascript.pages.academy/keksobooking',
+      () => {
+        addModal('#success');
+        resetDefaultValuesForm();
+        map.setMarkerCoordinate(mainMarker, DEFAULT_COORS);
+        map.setInputFromMarkerCoordinate('#address', mainMarker, 5);
+      },
+      () =>  addModal('#error'),
+      {
+        method: 'POST',
+        body,
+      }),
+  );
 };
 
 createMapMarker();
+
