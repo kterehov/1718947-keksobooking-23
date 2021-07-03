@@ -73,10 +73,7 @@ const isEsc = (evt) => (evt.key === 'Escape');
 const addModalEvent = (identity) => {
   const modal = document.querySelector(`#${identity}`);
 
-  modal.addEventListener('click', () => removeModal(modal),
-    {
-      once: true,
-    });
+  modal.addEventListener('click', () => removeModal(modal));
 
   document.addEventListener('keydown', (event) => {
     if(isEsc(event)){
