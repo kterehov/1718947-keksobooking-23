@@ -73,13 +73,26 @@ const isEsc = (evt) => (evt.key === 'Escape');
 const addModalEvent = (identity) => {
   const modal = document.querySelector(`#${identity}`);
 
-  modal.addEventListener('click', () => removeModal(modal));
-
-  document.addEventListener('keydown', (event) => {
+  /**
+   * обработчик ESC
+   * @param event
+   */
+  const keyDownModal = (event) => {
     if(isEsc(event)){
       removeModal(modal);
     }
-  });
+  };
+
+  /**
+   * Обработчик клика
+   */
+  const clickModal = () => {
+    document.removeEventListener('keydown', keyDownModal);
+    removeModal(modal);
+  };
+
+  modal.addEventListener('click',  clickModal, false);
+  document.addEventListener('keydown', keyDownModal, {once: true});
 };
 
 /**
