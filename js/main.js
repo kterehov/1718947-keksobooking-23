@@ -76,8 +76,6 @@ const addAdsFromServer = (map) => {
   );
 };
 
-
-
 /**
  * Создание карты
  */
