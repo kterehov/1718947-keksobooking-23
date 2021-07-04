@@ -10,7 +10,7 @@ const COUNT_ON_MAP = 10;
  * Количество элементов на карте
  * @type {number}
  */
-const TIME_REFRESH = 5000;
+const TIME_REFRESH = 500;
 
 /**
  * Функция фильтрации цен
