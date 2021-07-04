@@ -51,6 +51,26 @@ const inputAdFormTimeIn = adForm.querySelector('#timein');
 const inputAdFormTimeOut = adForm.querySelector('#timeout');
 
 /**
+ * @type {Element}
+ */
+const inputAdFormAvatar = adForm.querySelector('#avatar');
+
+/**
+ * @type {Element}
+ */
+const inputAdFormAvatarPreview = adForm.querySelector('.ad-form-header__preview');
+
+/**
+ * @type {Element}
+ */
+const inputAdFormImages = adForm.querySelector('#images');
+
+/**
+ * @type {Element}
+ */
+const inputAdFormImagesPreview = adForm.querySelector('.ad-form__photo');
+
+/**
  * Зависимость комнат и количества мест
  * @type {object}
  */
@@ -110,6 +130,10 @@ const storageAdForm = {
     inputAdFormType,
     inputAdFormTimeIn,
     inputAdFormTimeOut,
+    inputAdFormAvatar,
+    inputAdFormImages,
+    inputAdFormAvatarPreview,
+    inputAdFormImagesPreview,
   },
   vl: {
     inputAdFormTitle: {

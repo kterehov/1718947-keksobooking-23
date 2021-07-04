@@ -60,9 +60,33 @@ const submitFormEvent = (request) => {
  * @returns {*}
  */
 const resetDefaultValuesForm = () => {
-  storageAdForm.el.adForm.reset();
+  const adForm = storageAdForm.el;
+  adForm.adForm.reset();
+  adForm.inputAdFormAvatarPreview.children[0].src = 'img/muffin-grey.svg';
+  adForm.inputAdFormImagesPreview.children[0].src ='img/home.svg';
   storageMapFilterForm.el.mapFilterForm.reset();
 };
+
+/**
+ * Добавление превью фото
+ * @param fileSource
+ * @param preview
+ */
+const addEventPreviewImage = (fileSource, preview) => {
+  fileSource.addEventListener('change', () => {
+    const file = fileSource.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        preview.children[0].src = reader.result;
+      });
+      reader.readAsDataURL(file);
+    }
+  });
+};
+
+addEventPreviewImage(storageAdForm.el.inputAdFormAvatar, storageAdForm.el.inputAdFormAvatarPreview);
+addEventPreviewImage(storageAdForm.el.inputAdFormImages, storageAdForm.el.inputAdFormImagesPreview);
 
 /**
  * Эвент на зависимость между комнатами и местами
