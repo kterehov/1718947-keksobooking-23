@@ -1,5 +1,4 @@
 import {storageMapFilterForm} from './form-variables.js';
-import {debounce} from './utils/debounce.js';
 
 /**
  * Количество элементов на карте
@@ -11,7 +10,7 @@ const COUNT_ON_MAP = 10;
  * Количество элементов на карте
  * @type {number}
  */
-const TIME_REFRESH = 500;
+const TIME_REFRESH = 5000;
 
 /**
  * Функция фильтрации цен
@@ -69,6 +68,7 @@ const filterRule = {
   'housing-guests': (data, key, currentValue) => strictComparison(data, key, currentValue[0]),
   'housing-price': (data, key, currentValue) => comparePrices(data, key, currentValue[0]),
   'features': (data, key, currentValue) => compareFeatures(data, key, currentValue),
+  'debounceTimer': '',
 };
 
 const getKeyFilter = (value) => value.replace('housing-', '');
@@ -114,7 +114,8 @@ const filterEvent = (form, data, updateAdsInMap) => {
 
 const filterData = (data, updateAdsInMap) => {
   storageMapFilterForm.el.mapFilterForm.addEventListener('change', () => {
-    debounce(  filterEvent, TIME_REFRESH)(storageMapFilterForm.el.mapFilterForm, data, updateAdsInMap);
+    clearTimeout(filterRule.debounceTimer);
+    filterRule.debounceTimer = setTimeout(() => filterEvent(storageMapFilterForm.el.mapFilterForm, data, updateAdsInMap), TIME_REFRESH);
   });
 
   /**
