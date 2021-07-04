@@ -45,20 +45,18 @@ const comparePrices = (data, key, currentValue) => data.filter((item) => priceFi
  * @param {string} key
  * @param {string|int} currentValue
  */
-const compareFeatures = (data, key, currentValue) => {
-  return data.filter((item) => {
-    if(item.offer[key] === undefined){
+const compareFeatures = (data, key, currentValue) => (data.filter((item) => {
+  if (item.offer[key] === undefined) {
+    return false;
+  }
+  for (const feature of currentValue) {
+    if (!item.offer[key].includes(feature)) {
       return false;
     }
-    for(const feature of currentValue){
-      if(!item.offer[key].includes(feature)){
-        return false;
-      }
-    }
-    return true;
-  });
-};
-
+  }
+  return true;
+})
+);
 
 /**
  * Правила фильтрации
