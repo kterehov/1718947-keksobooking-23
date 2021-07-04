@@ -13,14 +13,11 @@ const request = (link, onSuccess, onFail, optionsList= {}) => {
     .then((response) => {
       if (response.ok) {
         return response.json();
-      } else {
-        throw new Error(`${response.status} ${response.statusText}`);
       }
+      throw new Error(`${response.status} ${response.statusText}`);
     })
-    .then((body) => onSuccess(body))
-    .catch((err) => {
-      onFail(err);
-    });
+    .then(onSuccess)
+    .catch(onFail);
 };
 
 export {request};

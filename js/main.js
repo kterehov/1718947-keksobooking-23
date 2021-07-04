@@ -2,7 +2,9 @@ import {showFailMessage, addModal} from './informative-message.js';
 import {formatAds} from './utils.js';
 import {request} from './request.js';
 import {createCard} from './card.js';
-import {disableForm, enableForm, submitFormEvent, resetDefaultValuesForm, filterData} from './form.js';
+import {disableForm, enableForm} from './form-activity.js';
+import {submitFormEvent, resetDefaultValuesForm} from './form-event.js';
+import {filterData} from './form-filter.js';
 import {renderMap} from './map.js';
 
 /**
@@ -52,66 +54,92 @@ const mainMarkerOptions = {
 };
 
 /**
- * Отклюфаем формы до рендера
+ * Основной маркер
+ * @type {object}
  */
-disableForm();
+const markerOptions = {
+  draggable: false,
+  icon: {
+    iconUrl: './img/pin.svg',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+  },
+  createCard,
+};
 
+/**
+ * Обновление объявлений на карте
+ * @param {L} map
+ * @param {object} items
+ */
+const updateAdsInMap = (map, items) => {
+  if(map.map.filteredAdGroup){
+    map.map.filteredAdGroup.remove();
+  }
+  const configAds = formatAds(items, markerOptions);
+  map.map.filteredAdGroup = map.addMarkers(configAds);
+};
+
+/**
+ * Добавление объявлений с сервера
+ * @param map
+ */
 const addAdsFromServer = (map) => {
   request(
     BACKEND_URL.loadAds,
     (body) => {
-
-      /**
-       * Обновление объявлений на карте
-       * @param items
-       */
-      const updateAdsInMap = (items) => {
-        if(map.map.filteredAdGroup!==''){
-          map.map.filteredAdGroup.remove();
-        }
-
-        const configAds = formatAds(items, {
-          draggable: false,
-          icon: {
-            iconUrl: './img/pin.svg',
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-          },
-          createCard,
-        });
-
-        map.map.filteredAdGroup = map.addMarkers(configAds);
-      };
-
       /**
        * Фильтрация по фильтрам формы
        */
-      filterData(body, updateAdsInMap);
-
+      filterData(body, (items) => updateAdsInMap(map, items));
     },
     showFailMessage,
   );
 };
 
 /**
+ * Установить адрес
+ * @param {L} map
+ * @param {object} mainMarker
+ */
+const setAddress = (map, mainMarker) => {
+  map.setInputFromMarkerCoordinate('#address', mainMarker, 5);
+};
+
+/**
  * Создание карты
+ * @returns {{map, mainMarker}}
  */
 const createMapMarker = () => {
   const map = renderMap;
   map.init(L, mapOptions);
   const mainMarker = map.addMarker(mainMarkerOptions);
+  setAddress(map, mainMarker);
+  return {map, mainMarker};
+};
 
-  const setAddress = () => {
-    map.setInputFromMarkerCoordinate('#address', mainMarker, 5);
-  };
+/**
+ * Создание карты
+ */
+const init = () => {
+  /**
+   * Отключаем формы до рендера
+   */
+  disableForm();
 
-  setAddress();
+  /**
+   * Рисуем карты
+   */
+  const {map, mainMarker} = createMapMarker();
 
   /**
    * Добавляем данные с сервера
    */
   addAdsFromServer(map);
 
+  /**
+   * Вешаем эвенты на форму
+   */
   submitFormEvent(
     (body)=>request(
       BACKEND_URL.saveAds,
@@ -119,7 +147,7 @@ const createMapMarker = () => {
         addModal('#success');
         resetDefaultValuesForm();
         map.setMarkerCoordinate(mainMarker, DEFAULT_COORS);
-        setAddress();
+        setAddress(map, mainMarker);
       },
       () =>  addModal('#error'),
       {
@@ -129,4 +157,4 @@ const createMapMarker = () => {
   );
 };
 
-createMapMarker();
+init();

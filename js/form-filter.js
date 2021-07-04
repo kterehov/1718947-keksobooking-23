@@ -44,8 +44,8 @@ const comparePrices = (data, key, currentValue) => data.filter((item) => priceFi
  * @param {string} key
  * @param {string|int} currentValue
  */
-const compareFeatures = (data, key, currentValue) => (data.filter((item) => {
-  if (item.offer[key] === undefined) {
+const compareFeatures = (data, key, currentValue) => data.filter((item) => {
+  if (!item.offer[key]) {
     return false;
   }
   for (const feature of currentValue) {
@@ -54,8 +54,7 @@ const compareFeatures = (data, key, currentValue) => (data.filter((item) => {
     }
   }
   return true;
-})
-);
+});
 
 /**
  * Правила фильтрации
@@ -75,9 +74,9 @@ const getKeyFilter = (value) => value.replace('housing-', '');
 
 /**
  * Эвент фильтрации
- * @param {object} evt
+ * @param {object} form
  * @param {object} data
- * @param {function} updateAdsInMap
+ * @param {function} updateAdInMap
  */
 const filterEvent = (form, data, updateAdsInMap) => {
   /**
@@ -112,11 +111,30 @@ const filterEvent = (form, data, updateAdsInMap) => {
   updateAdsInMap(filterRule.result.slice(0,COUNT_ON_MAP));
 };
 
+/**
+ * Событие на фильтрация
+ *
+ * @param {object} data
+ * @param {function} updateAdsInMap
+ */
+const filterDataEvent = (data, updateAdsInMap) => {
+  clearTimeout(filterRule.debounceTimer);
+  filterRule.debounceTimer = setTimeout(
+    () => filterEvent(storageMapFilterForm.el.mapFilterForm, data, updateAdsInMap),
+    TIME_REFRESH,
+  );
+};
+
+/**
+ * Функция добавления событий на фильтрацию и сброс формы
+ * @param data
+ * @param updateAdsInMap
+ */
 const filterData = (data, updateAdsInMap) => {
-  storageMapFilterForm.el.mapFilterForm.addEventListener('change', () => {
-    clearTimeout(filterRule.debounceTimer);
-    filterRule.debounceTimer = setTimeout(() => filterEvent(storageMapFilterForm.el.mapFilterForm, data, updateAdsInMap), TIME_REFRESH);
-  });
+
+  const mapFilter = storageMapFilterForm.el.mapFilterForm;
+  mapFilter.addEventListener('change', () => filterDataEvent(data, updateAdsInMap));
+  mapFilter.addEventListener('reset', () => filterDataEvent(data, updateAdsInMap));
 
   /**
    * Отрисовываем карту при инициализации

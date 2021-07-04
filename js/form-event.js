@@ -1,4 +1,4 @@
-import {storageAdForm, roomNumberToCapacity, currentTypeToPrice} from './form-variables.js';
+import {storageAdForm, roomNumberToCapacity, currentTypeToPrice, storageMapFilterForm} from './form-variables.js';
 import {validate} from './form-validation.js';
 
 /**
@@ -6,7 +6,7 @@ import {validate} from './form-validation.js';
  * @param {object} element
  * @param {array} values
  */
-const toogleInputOptions = (element, values) => {
+const toggle = (element, values) => {
   const options = element.querySelectorAll('option');
   options.forEach((item) => {
     if (values.includes(item.value)) {
@@ -30,13 +30,8 @@ const toogleInputOptions = (element, values) => {
  * @param {object} roomToCapacity
  */
 const changeRoomNumberToCapacity = (room, capacity, roomToCapacity) => {
-
-  if (typeof roomToCapacity[room.value] !== 'undefined') {
-    toogleInputOptions(capacity, roomToCapacity[room.value]);
-  } else {
-    toogleInputOptions(capacity, []);
-  }
-
+  const rooms = roomToCapacity[room.value] || [];
+  toggle(capacity, rooms);
 };
 
 /**
@@ -49,47 +44,48 @@ const changeTime = (from, to) => {
 };
 
 /**
- * Дефолтное значение у комнат - мест при загрузке страницы
- */
-changeRoomNumberToCapacity(storageAdForm.el.inputAdFormRoomNumber, storageAdForm.el.inputAdFormCapacity, roomNumberToCapacity);
-
-/**
- * Дефольное значение у цены за ночь с валидацией
- */
-currentTypeToPrice();
-
-/**
- * Эвент на зависимость между комнатами и местами
- */
-storageAdForm.el.adForm.addEventListener('change', (event) => {
-  if (event.target === storageAdForm.el.inputAdFormRoomNumber) {
-    changeRoomNumberToCapacity(event.target, storageAdForm.el.inputAdFormCapacity, roomNumberToCapacity);
-  }
-
-  if (event.target === storageAdForm.el.inputAdFormType) {
-    currentTypeToPrice();
-  }
-
-  if (event.target === storageAdForm.el.inputAdFormTimeIn) {
-    changeTime(event.target, storageAdForm.el.inputAdFormTimeOut);
-  }
-
-  if (event.target === storageAdForm.el.inputAdFormTimeOut) {
-    changeTime(event.target, storageAdForm.el.inputAdFormTimeIn);
-  }
-});
-
-/**
  * Отправка формы
  * @param {function} request
  */
 const submitFormEvent = (request) => {
-  storageAdForm.el.adForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.target);
+  storageAdForm.el.adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const formData = new FormData(evt.target);
     request(formData);
   });
 };
+
+/**
+ * Сброс формы
+ * @returns {*}
+ */
+const resetDefaultValuesForm = () => {
+  storageAdForm.el.adForm.reset();
+  storageMapFilterForm.el.mapFilterForm.reset();
+};
+
+/**
+ * Эвент на зависимость между комнатами и местами
+ */
+storageAdForm.el.adForm.addEventListener('change', (evt) => {
+  const target = evt.target;
+  const formElement = storageAdForm.el;
+  if (target === formElement.inputAdFormRoomNumber) {
+    changeRoomNumberToCapacity(target, formElement.inputAdFormCapacity, roomNumberToCapacity);
+  }
+
+  if (target === formElement.inputAdFormType) {
+    currentTypeToPrice();
+  }
+
+  if (target === formElement.inputAdFormTimeIn) {
+    changeTime(target, formElement.inputAdFormTimeOut);
+  }
+
+  if (target === formElement.inputAdFormTimeOut) {
+    changeTime(target, formElement.inputAdFormTimeIn);
+  }
+});
 
 /**
  * Создание эвентов на валидацию и живое изменение
@@ -104,6 +100,14 @@ for (const eventElement in storageAdForm.vl) {
   });
 }
 
-const resetDefaultValuesForm = () => storageAdForm.el.adForm.reset();
+/**
+ * Дефолтное значение у комнат - мест при загрузке страницы
+ */
+changeRoomNumberToCapacity(storageAdForm.el.inputAdFormRoomNumber, storageAdForm.el.inputAdFormCapacity, roomNumberToCapacity);
+
+/**
+ * Дефолтное значение у цены за ночь с валидацией
+ */
+currentTypeToPrice();
 
 export {submitFormEvent, resetDefaultValuesForm};
