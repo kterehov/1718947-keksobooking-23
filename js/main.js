@@ -128,7 +128,7 @@ const init = () => {
   disableForm();
 
   /**
-   * Рисуем карты
+   * Рисуем карту
    */
   const {map, mainMarker} = createMapMarker();
 
