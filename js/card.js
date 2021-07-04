@@ -17,7 +17,7 @@ const translate = {
 const changeTextElement = (card, selector, value) => {
   const element = card.querySelector(selector);
 
-  if(value.length===0){
+  if(value === undefined){
     element.classList.add('hidden');
   }
 
@@ -33,6 +33,12 @@ const changeTextElement = (card, selector, value) => {
 const createPhotosBlock = (card, links) => {
   const photoTemplate = card.querySelector('.popup__photo');
   const photoList = card.querySelector('.popup__photos');
+
+  if(links === undefined){
+    photoList.removeChild(photoTemplate);
+    return true;
+  }
+
   links.forEach((link) => {
     const photo = photoTemplate.cloneNode();
     photo.setAttribute('src', link);

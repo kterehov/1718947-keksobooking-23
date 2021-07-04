@@ -2,9 +2,8 @@ import {showFailMessage, addModal} from './informative-message.js';
 import {formatAds} from './utils.js';
 import {request} from './request.js';
 import {createCard} from './card.js';
-import {disableForm, enableForm, submitFormEvent, resetDefaultValuesForm} from './form.js';
+import {disableForm, enableForm, submitFormEvent, resetDefaultValuesForm, filterData} from './form.js';
 import {renderMap} from './map.js';
-
 
 /**
  * Дефолтный координаты
@@ -61,16 +60,34 @@ const addAdsFromServer = (map) => {
   request(
     BACKEND_URL.loadAds,
     (body) => {
-      const configAds = formatAds(body, {
-        draggable: false,
-        icon: {
-          iconUrl: './img/pin.svg',
-          iconSize: [40, 40],
-          iconAnchor: [20, 40],
-        },
-        createCard,
-      });
-      map.addMarkers(configAds);
+
+      /**
+       * Обновление объявлений на карте
+       * @param items
+       */
+      const updateAdsInMap = (items) => {
+        if(map.map.filteredAdGroup!==''){
+          map.map.filteredAdGroup.remove();
+        }
+
+        const configAds = formatAds(items, {
+          draggable: false,
+          icon: {
+            iconUrl: './img/pin.svg',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+          },
+          createCard,
+        });
+
+        map.map.filteredAdGroup = map.addMarkers(configAds);
+      };
+
+      /**
+       * Фильтрация по фильтрам формы
+       */
+      filterData(body, updateAdsInMap);
+
     },
     showFailMessage,
   );
