@@ -46,8 +46,8 @@ function addMarker(markerOptions) {
 
 /**
  * Установка координат для маркера
- * @param market
- * @param options
+ * @param {object} marker
+ * @param {object} options
  */
 function setMarkerCoordinate(marker, options) {
   marker.setLatLng(options);
@@ -109,6 +109,7 @@ const renderMap = {
   map: {
     'lib': '',
     'element': '',
+    'filteredAdGroup': '',
   },
   createMapIcon,
   createMapMarker,

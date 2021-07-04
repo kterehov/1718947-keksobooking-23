@@ -6,7 +6,8 @@ const OPENED_TIME = 3000;
 
 /**
  * Обработка ошибок
- * @param message
+ * @param {string} message
+ * @param {string} color
  */
 const showMessage = (message, color) => {
   const alertContainer = document.createElement('div');
@@ -29,7 +30,6 @@ const showMessage = (message, color) => {
   }, OPENED_TIME);
 };
 
-const showSuccessMessage = (messageText) => showMessage(messageText, 'green');
 const showFailMessage = (messageText) => showMessage(messageText, 'red');
 
 /**
@@ -105,4 +105,4 @@ const addModal = (templateId = '#success') => {
   addModalEvent(identity);
 };
 
-export {showSuccessMessage, showFailMessage, addModal};
+export {showFailMessage, addModal};

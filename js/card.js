@@ -17,7 +17,7 @@ const translate = {
 const changeTextElement = (card, selector, value) => {
   const element = card.querySelector(selector);
 
-  if(value.length===0){
+  if(!value){
     element.classList.add('hidden');
   }
 
@@ -33,6 +33,12 @@ const changeTextElement = (card, selector, value) => {
 const createPhotosBlock = (card, links) => {
   const photoTemplate = card.querySelector('.popup__photo');
   const photoList = card.querySelector('.popup__photos');
+
+  if(!links){
+    photoList.removeChild(photoTemplate);
+    return;
+  }
+
   links.forEach((link) => {
     const photo = photoTemplate.cloneNode();
     photo.setAttribute('src', link);
@@ -47,15 +53,16 @@ const createPhotosBlock = (card, links) => {
  */
 const createCard = (item) => {
   const card = template.cloneNode(true);
-  changeTextElement(card, '.popup__title', item.offer.title);
-  changeTextElement(card, '.popup__text--address', item.offer.address);
-  changeTextElement(card, '.popup__text--price', `${item.offer.price} ₽/ночь`);
-  changeTextElement(card, '.popup__type', translate[item.offer.type]);
-  changeTextElement(card, '.popup__text--capacity', `${item.offer.rooms} комнаты для ${item.offer.guests} гостей`);
-  changeTextElement(card, '.popup__text--time', `Заезд после ${item.offer.checkin}, выезд до ${item.offer.checkout}`);
-  changeTextElement(card, '.popup__features', item.offer.features);
-  changeTextElement(card, '.popup__description', item.offer.description);
-  createPhotosBlock(card, item.offer.photos);
+  const offer = item.offer;
+  changeTextElement(card, '.popup__title', offer.title);
+  changeTextElement(card, '.popup__text--address', offer.address);
+  changeTextElement(card, '.popup__text--price', `${offer.price} ₽/ночь`);
+  changeTextElement(card, '.popup__type', translate[offer.type]);
+  changeTextElement(card, '.popup__text--capacity', `${offer.rooms} комнаты для ${offer.guests} гостей`);
+  changeTextElement(card, '.popup__text--time', `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`);
+  changeTextElement(card, '.popup__features', offer.features);
+  changeTextElement(card, '.popup__description', offer.description);
+  createPhotosBlock(card, offer.photos);
   const photoAvatar = card.querySelector('.popup__avatar');
   photoAvatar.setAttribute('src', item.author.avatar);
   return card;

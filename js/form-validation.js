@@ -7,32 +7,36 @@ import {validityState} from './form-variables.js';
  */
 const validate = (element, report = false) => {
   const currentElement = element.object;
-  const message = [];
-
-  for (const key in element.rules) {
-    if (currentElement.validity[element.rules[key].type]) {
-      const currentRule = element.rules[key];
-      if (currentRule.type === validityState.tooShort) {
-        const currentValue = currentElement.value.length;
-        message.push(currentRule.text.replace('{value}', currentRule.value - currentValue));
-      } else if (currentRule.type === validityState.tooLong) {
-        const currentValue = currentElement.value.length;
-        message.push(currentRule.text.replace('{value}', currentRule.value - currentValue));
-      } else if (currentRule.type === validityState.rangeOverflow) {
-        message.push(currentRule.text.replace('{value}', currentRule.value));
-      } else if (currentRule.type === validityState.valueMissing ){
-        message.push(currentRule.text);
-      } else if (currentRule.type === validityState.rangeUnderflow ){
-        message.push(currentRule.text.replace('{value}', currentRule.value));
+  const messages = [];
+  for (const currentRule of Object.values(element.rules)){
+    if (currentElement.validity[currentRule.type]) {
+      switch (currentRule.type) {
+        case validityState.tooShort:
+          messages.push(currentRule.text.replace(
+            '{value}',
+            currentRule.value - currentElement.value.length),
+          );
+          break;
+        case validityState.tooLong:
+          messages.push(currentRule.text.replace(
+            '{value}',
+            currentRule.value - currentElement.value.length),
+          );
+          break;
+        case validityState.rangeOverflow:
+          messages.push(currentRule.text.replace('{value}', currentRule.value));
+          break;
+        case validityState.valueMissing:
+          messages.push(currentRule.text);
+          break;
+        case validityState.rangeUnderflow:
+          messages.push(currentRule.text.replace('{value}', currentRule.value));
+          break;
       }
     }
   }
 
-  if (message) {
-    currentElement.setCustomValidity(message.join('\\n'));
-  } else {
-    currentElement.setCustomValidity('');
-  }
+  currentElement.setCustomValidity(messages.join('\\n'));
 
   if (report) {
     currentElement.reportValidity();
