@@ -5,7 +5,7 @@ import {createCard} from './card.js';
 import {disableForm, enableForm} from './form-activity.js';
 import {submitFormEvent, resetDefaultValuesForm} from './form-event.js';
 import {filterData} from './form-filter.js';
-import {renderMap} from './map.js';
+import {RenderMap} from './map.js';
 
 /**
  * Дефолтный координаты
@@ -17,7 +17,7 @@ const DEFAULT_COORS = {
   zoom: 12,
 };
 
-const BACKEND_URL = {
+const backendUrls = {
   loadAds: 'https://23.javascript.pages.academy/keksobooking/data',
   saveAds: 'https://23.javascript.pages.academy/keksobooking',
 };
@@ -86,7 +86,7 @@ const updateAdsInMap = (map, items) => {
  */
 const addAdsFromServer = (map) => {
   request(
-    BACKEND_URL.loadAds,
+    backendUrls.loadAds,
     (body) => {
       /**
        * Фильтрация по фильтрам формы
@@ -111,7 +111,7 @@ const setAddress = (map, mainMarker) => {
  * @returns {{map, mainMarker}}
  */
 const createMapMarker = () => {
-  const map = renderMap;
+  const map = RenderMap;
   map.init(L, mapOptions);
   const mainMarker = map.addMarker(mainMarkerOptions);
   setAddress(map, mainMarker);
@@ -142,7 +142,7 @@ const init = () => {
    */
   submitFormEvent(
     (body)=>request(
-      BACKEND_URL.saveAds,
+      backendUrls.saveAds,
       () => {
         addModal('#success');
         resetDefaultValuesForm();
