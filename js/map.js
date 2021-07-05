@@ -105,7 +105,7 @@ function setInputFromMarkerCoordinate(input, marker, point) {
   });
 }
 
-const RenderMap = {
+const renderMap = {
   map: {
     'lib': '',
     'element': '',
@@ -120,4 +120,4 @@ const RenderMap = {
   setMarkerCoordinate,
 };
 
-export {RenderMap};
+export {renderMap};
