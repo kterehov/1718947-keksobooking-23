@@ -1,4 +1,4 @@
-import {storageAdForm, roomNumberToCapacity, currentTypeToPrice, storageMapFilterForm} from './form-variables.js';
+import {storageAdForm, roomNumberToCapacity, setTypeToPrice, storageMapFilterForm} from './form-variables.js';
 import {validate} from './form-validation.js';
 
 /**
@@ -35,6 +35,15 @@ const changeRoomNumberToCapacity = (room, capacity, roomToCapacity) => {
 };
 
 /**
+ * Проверка при отправке формы
+ * @param {object} room
+ * @param {capacity} capacity
+ * @param {object} roomToCapacity
+ * @returns {*}
+ */
+const checkRoomNumberToCapacity = (room, capacity, roomToCapacity) => roomToCapacity[room.value].includes(capacity.value);
+
+/**
  * Изменение времени
  * @param {object} from
  * @param {object} to
@@ -46,12 +55,25 @@ const changeTime = (from, to) => {
 /**
  * Отправка формы
  * @param {function} request
+ * @param {function} showFailMessage
  */
-const submitFormEvent = (request) => {
+const submitFormEvent = (request, showFailMessage) => {
   storageAdForm.el.adForm.addEventListener('submit', (evt) => {
+
     evt.preventDefault();
-    const formData = new FormData(evt.target);
-    request(formData);
+
+    const formElement = storageAdForm.el;
+    console.log(checkRoomNumberToCapacity(formElement.inputAdFormRoomNumber, formElement.inputAdFormCapacity, roomNumberToCapacity));
+
+
+    if (checkRoomNumberToCapacity(formElement.inputAdFormRoomNumber, formElement.inputAdFormCapacity, roomNumberToCapacity)) {
+      const formData = new FormData(evt.target);
+      request(formData);
+    } else {
+      showFailMessage('Что-то пошло не так, но мы все поправили. Повторите отправку');
+      changeRoomNumberToCapacity(formElement.inputAdFormRoomNumber, formElement.inputAdFormCapacity, roomNumberToCapacity);
+    }
+
   });
 };
 
@@ -99,7 +121,7 @@ storageAdForm.el.adForm.addEventListener('change', (evt) => {
   }
 
   if (target === formElement.inputAdFormType) {
-    currentTypeToPrice();
+    setTypeToPrice();
   }
 
   if (target === formElement.inputAdFormTimeIn) {
@@ -132,6 +154,6 @@ changeRoomNumberToCapacity(storageAdForm.el.inputAdFormRoomNumber, storageAdForm
 /**
  * Дефолтное значение у цены за ночь с валидацией
  */
-currentTypeToPrice();
+setTypeToPrice();
 
 export {submitFormEvent, resetDefaultValuesForm};

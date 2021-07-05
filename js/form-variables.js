@@ -109,7 +109,7 @@ const typeToPrice = {
  * Функция управления минимальной ценой от типа дома
  * @returns {int}
  */
-const currentTypeToPrice = () => {
+const setTypeToPrice = () => {
   const currentPrice = typeToPrice[inputAdFormType.value];
   inputAdFormPrice.setAttribute('min', currentPrice);
   inputAdFormPrice.setAttribute('placeholder', currentPrice);
@@ -169,7 +169,7 @@ const storageAdForm = {
         },
         2 : {
           'type': validityState.rangeUnderflow,
-          'value': currentTypeToPrice,
+          'value': setTypeToPrice,
           'text': 'Минимальная цена за ночь {value}.',
         },
       },
@@ -188,4 +188,4 @@ const storageMapFilterForm = {
   },
 };
 
-export {adForm, mapFilterForm, roomNumberToCapacity, storageAdForm, validityState, typeToPrice, currentTypeToPrice, storageMapFilterForm};
+export {adForm, mapFilterForm, roomNumberToCapacity, storageAdForm, validityState, typeToPrice, setTypeToPrice, storageMapFilterForm};

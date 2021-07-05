@@ -28,7 +28,7 @@ const priceFilter = {
  * @param {string} key
  * @param {string|int} currentValue
  */
-const strictComparison = (data, key, currentValue) => data.filter((item) => (item.offer[key].toString() === currentValue.toString()));
+const compareValues = (data, key, currentValue) => data.filter((item) => (item.offer[key].toString() === currentValue.toString()));
 
 /**
  * Сравнение цены
@@ -62,9 +62,9 @@ const compareFeatures = (data, key, currentValue) => data.filter((item) => {
  */
 const filterRule = {
   'result': {},
-  'housing-type': (data, key, currentValue) => strictComparison(data, key, currentValue[0]),
-  'housing-rooms': (data, key, currentValue) => strictComparison(data, key, currentValue[0]),
-  'housing-guests': (data, key, currentValue) => strictComparison(data, key, currentValue[0]),
+  'housing-type': (data, key, currentValue) => compareValues(data, key, currentValue[0]),
+  'housing-rooms': (data, key, currentValue) => compareValues(data, key, currentValue[0]),
+  'housing-guests': (data, key, currentValue) => compareValues(data, key, currentValue[0]),
   'housing-price': (data, key, currentValue) => comparePrices(data, key, currentValue[0]),
   'features': (data, key, currentValue) => compareFeatures(data, key, currentValue),
   'debounceTimer': '',

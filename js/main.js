@@ -154,6 +154,7 @@ const init = () => {
         method: 'POST',
         body,
       }),
+    showFailMessage,
   );
 };
 
