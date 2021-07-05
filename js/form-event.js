@@ -63,9 +63,6 @@ const submitFormEvent = (request, showFailMessage) => {
     evt.preventDefault();
 
     const formElement = storageAdForm.el;
-    console.log(checkRoomNumberToCapacity(formElement.inputAdFormRoomNumber, formElement.inputAdFormCapacity, roomNumberToCapacity));
-
-
     if (checkRoomNumberToCapacity(formElement.inputAdFormRoomNumber, formElement.inputAdFormCapacity, roomNumberToCapacity)) {
       const formData = new FormData(evt.target);
       request(formData);
